@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, Suspense } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, useAnimations, useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
-import { useTianguis } from "@/contexts/TianguisContext";
+import { useTianguis, Collider } from "@/contexts/TianguisContext";
 
 const WALK_SPEED = 2;
 const RUN_SPEED = 5;
@@ -28,6 +28,47 @@ const _targetLookAt = new THREE.Vector3();
 // Función para lerp basado en delta-time
 function damp(current: number, target: number, lambda: number, delta: number): number {
   return THREE.MathUtils.lerp(current, target, 1 - Math.exp(-lambda * delta));
+}
+
+// Función para verificar colisión AABB (Axis-Aligned Bounding Box)
+function checkCollision(
+  pos1: [number, number, number],
+  size1: [number, number, number],
+  pos2: [number, number, number],
+  size2: [number, number, number]
+): boolean {
+  // Calcular los límites de cada bounding box
+  const min1 = {
+    x: pos1[0] - size1[0] / 2,
+    y: pos1[1] - size1[1] / 2,
+    z: pos1[2] - size1[2] / 2,
+  };
+  const max1 = {
+    x: pos1[0] + size1[0] / 2,
+    y: pos1[1] + size1[1] / 2,
+    z: pos1[2] + size1[2] / 2,
+  };
+
+  const min2 = {
+    x: pos2[0] - size2[0] / 2,
+    y: pos2[1] - size2[1] / 2,
+    z: pos2[2] - size2[2] / 2,
+  };
+  const max2 = {
+    x: pos2[0] + size2[0] / 2,
+    y: pos2[1] + size2[1] / 2,
+    z: pos2[2] + size2[2] / 2,
+  };
+
+  // Verificar superposición en los tres ejes
+  return (
+    min1.x <= max2.x &&
+    max1.x >= min2.x &&
+    min1.y <= max2.y &&
+    max1.y >= min2.y &&
+    min1.z <= max2.z &&
+    max1.z >= min2.z
+  );
 }
 
 interface CatModelProps {
@@ -139,7 +180,7 @@ export function Cat() {
   const [isMoving, setIsMoving] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [turnDirection, setTurnDirection] = useState(0);
-  const { setCatPosition } = useTianguis();
+  const { setCatPosition, colliders } = useTianguis();
 
   // Variables para el salto
   const velocityY = useRef(0);
@@ -264,10 +305,29 @@ export function Cat() {
 
       // Límites del tianguis
       const limit = 12;
-      if (_newPosition.x > -limit && _newPosition.x < limit) {
-        groupRef.current.position.x = _newPosition.x;
+      _newPosition.x = THREE.MathUtils.clamp(_newPosition.x, -limit, limit);
+      _newPosition.z = THREE.MathUtils.clamp(_newPosition.z, -limit, limit);
+
+      // Tamaño del collider del gato (aproximado)
+      const catSize: [number, number, number] = [0.6, 0.5, 0.8];
+
+      // Verificar colisión con todos los objetos
+      let hasCollision = false;
+      for (const collider of colliders) {
+        if (checkCollision(
+          [_newPosition.x, _newPosition.y, _newPosition.z],
+          catSize,
+          collider.position,
+          collider.size
+        )) {
+          hasCollision = true;
+          break;
+        }
       }
-      if (_newPosition.z > -limit && _newPosition.z < limit) {
+
+      // Solo mover si no hay colisión
+      if (!hasCollision) {
+        groupRef.current.position.x = _newPosition.x;
         groupRef.current.position.z = _newPosition.z;
       }
     }

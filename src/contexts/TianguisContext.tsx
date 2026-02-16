@@ -17,6 +17,13 @@ export interface Puesto {
   completado: boolean;
 }
 
+// Collider para detección de colisiones
+export interface Collider {
+  position: [number, number, number];
+  size: [number, number, number]; // [width, height, depth]
+  type: string; // tipo de objeto para debugging
+}
+
 interface TianguisContextType {
   puestos: Puesto[];
   puestoActual: Puesto | null;
@@ -26,6 +33,7 @@ interface TianguisContextType {
   comidasObtenidas: string[];
   agregarComida: (comida: string) => void;
   completarPuesto: (id: number) => void;
+  colliders: Collider[];
 }
 
 const TianguisContext = createContext<TianguisContextType | undefined>(undefined);
@@ -99,6 +107,49 @@ export function TianguisProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  // Colliders para todos los objetos sólidos del tianguis
+  const colliders: Collider[] = [
+    // Puestos principales (usando dimensiones aproximadas de cada tipo)
+    { position: [-5, 0, 0], size: [3.5, 3, 2], type: "puesto-tacos" },
+    { position: [5, 0, 0], size: [3.5, 3.5, 2], type: "puesto-frutas" },
+    { position: [-5, 0, -5], size: [2.5, 3.5, 1.8], type: "puesto-dulces" },
+    { position: [5, 0, -5], size: [2.8, 3, 2.2], type: "puesto-elotes" },
+    { position: [0, 0, -8], size: [3, 4, 2], type: "puesto-pan" },
+
+    // Árboles
+    { position: [-10, 0, -10], size: [2.5, 4, 2.5], type: "arbol" },
+    { position: [10, 0, 10], size: [2.5, 4, 2.5], type: "arbol" },
+
+    // Farolas
+    { position: [-12, 0, -5], size: [0.5, 4.5, 0.5], type: "farola" },
+    { position: [-12, 0, 5], size: [0.5, 4.5, 0.5], type: "farola" },
+    { position: [12, 0, -5], size: [0.5, 4.5, 0.5], type: "farola" },
+    { position: [12, 0, 5], size: [0.5, 4.5, 0.5], type: "farola" },
+
+    // Cajas apiladas
+    { position: [-10, 0, 2], size: [0.8, 1.5, 0.8], type: "cajas" },
+    { position: [10, 0, -10], size: [0.8, 1.5, 0.8], type: "cajas" },
+    { position: [-8, 0, -12], size: [0.8, 1.5, 0.8], type: "cajas" },
+
+    // Macetas con plantas
+    { position: [10, 0, -2], size: [0.8, 1.2, 0.8], type: "maceta" },
+    { position: [-10, 0, -8], size: [0.8, 1.2, 0.8], type: "maceta" },
+    { position: [8, 0, -12], size: [0.8, 1.2, 0.8], type: "maceta" },
+
+    // Stands vacíos
+    { position: [-12, 0, 0], size: [1.8, 2, 1.2], type: "stand" },
+    { position: [12, 0, 0], size: [1.8, 2, 1.2], type: "stand" },
+
+    // Botes de basura
+    { position: [-7, 0, 10], size: [0.8, 1, 0.8], type: "basura" },
+    { position: [7, 0, 10], size: [0.8, 1, 0.8], type: "basura" },
+
+    // Edificios al fondo (paredes)
+    { position: [-8, 0, -15], size: [4, 5, 1], type: "edificio" },
+    { position: [8, 0, -15], size: [5, 6, 1], type: "edificio" },
+    { position: [0, 0, -15], size: [3, 4, 1], type: "edificio" },
+  ];
+
   return (
     <TianguisContext.Provider
       value={{
@@ -110,6 +161,7 @@ export function TianguisProvider({ children }: { children: ReactNode }) {
         comidasObtenidas,
         agregarComida,
         completarPuesto,
+        colliders,
       }}
     >
       {children}
