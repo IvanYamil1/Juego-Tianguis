@@ -201,7 +201,7 @@ export function TianguisProvider({ children, userId }: TianguisProviderProps) {
   const agregarFrutas = useCallback((cantidad: number, tipo: string) => {
     setInventarioFrutas((prev) => {
       const tipoKey = tipo as keyof Omit<InventarioFrutas, 'total'>;
-      if (tipoKey in prev && tipoKey !== 'total') {
+      if (tipoKey in prev) {
         return {
           ...prev,
           [tipoKey]: prev[tipoKey] + cantidad,
