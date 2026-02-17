@@ -1,0 +1,396 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.11930780112743378,
+        0.2268396019935608,
+        0.2601422965526581
+      ],
+      "min": [
+        -0.12413539737462997,
+        -0.22695350646972656,
+        -0.2642019987106323
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 33756,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9997879266738892,
+        0.9963865280151367,
+        0.9998185634613037
+      ],
+      "min": [
+        -0.9992601275444031,
+        -0.9999681115150452,
+        -0.9998396039009094
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 22504,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 45008,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 67512,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 90016,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 112520,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 135024,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 157528,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 180032,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 202536,
+      "componentType": 5126,
+      "count": 2813,
+      "max": [
+        0.9991359114646912,
+        0.9702001810073853
+      ],
+      "min": [
+        0.0008640530286356807,
+        0.0008640289888717234
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 12072,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "vicente betoret ferrero (https://sketchfab.com/deathcow)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/pomeranian-391105fb0af940d493c1aa0fe3fcab55",
+      "title": "pomeranian"
+    },
+    "generator": "Sketchfab-16.7.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 48288,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 225040,
+      "byteOffset": 48288,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 67512,
+      "byteOffset": 273328,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 340840,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_specular"
+  ],
+  "images": [
+    {
+      "uri": "textures/base_material.001_baseColor.jpeg"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularColorFactor": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "specularFactor": 0.0
+        }
+      },
+      "name": "base_material.001",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.6
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "mesh_base_material.001_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2,
+            "TEXCOORD_1": 3,
+            "TEXCOORD_2": 4,
+            "TEXCOORD_3": 5,
+            "TEXCOORD_4": 6,
+            "TEXCOORD_5": 7,
+            "TEXCOORD_6": 8,
+            "TEXCOORD_7": 9,
+            "TEXCOORD_8": 10,
+            "TEXCOORD_9": 11
+          },
+          "indices": 12,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.02539999969303608,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.02539999969303608,
+        0.0,
+        0.0,
+        -0.02539999969303608,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "pomerania.FBX"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        75.04425048828125,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        75.04428863525291,
+        1.222626723877528e-05,
+        0.0,
+        0.0,
+        -1.222626723877528e-05,
+        75.04428863525291,
+        0.0,
+        0.0,
+        15.610090255737305,
+        0.0,
+        1.0
+      ],
+      "name": "mesh"
+    },
+    {
+      "mesh": 0,
+      "name": "mesh_base_material.001_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ]
+}

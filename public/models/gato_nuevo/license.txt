@@ -1,0 +1,11 @@
+Model Information:
+* title:	GATO
+* source:	https://sketchfab.com/3d-models/gato-506a45885ab64cc48240c4fd14caeb0e
+* author:	GABI (https://sketchfab.com/a0296)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "GATO" (https://sketchfab.com/3d-models/gato-506a45885ab64cc48240c4fd14caeb0e) by GABI (https://sketchfab.com/a0296) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

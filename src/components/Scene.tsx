@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, memo } from "react";
 import { Tianguis } from "./Tianguis";
 import { Cat } from "./Cat";
+import { DialogoBurbuja } from "./DialogoBurbuja";
 import { KeyboardControls } from "@react-three/drei";
 
 const controls = [
@@ -62,6 +63,7 @@ export default function Scene() {
         <Suspense fallback={null}>
           <MemoizedTianguis />
           <Cat />
+          <DialogoBurbuja />
         </Suspense>
       </Canvas>
     </KeyboardControls>

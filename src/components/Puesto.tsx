@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTianguis, Puesto as PuestoType } from "@/contexts/TianguisContext";
 import { Text } from "@react-three/drei";
 import * as THREE from "three";
+import { Mascota } from "./Mascota";
 
 interface PuestoProps {
   puesto: PuestoType;
@@ -68,13 +69,17 @@ function PuestoTacos({ puesto, isNear }: { puesto: PuestoType; isNear: boolean }
         </Text>
       </group>
 
+      <pointLight position={[0, 2.5, 0]} intensity={2} distance={5} color={toldoColors.tacos} />
+
+      {/* Mascota del puesto */}
+      <Mascota tipo="pomeranian" position={[1.8, 0, 1]} rotation={[0, Math.PI + Math.PI / 4, 0]} scale={0.8} />
+
+      {/* Indicador sobre la mascota */}
       {isNear && !puesto.completado && (
-        <Text position={[0, 2, 0.5]} fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
+        <Text position={[1.8, 1.8, 1]} fontSize={0.25} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
           [E] Hablar
         </Text>
       )}
-
-      <pointLight position={[0, 2.5, 0]} intensity={2} distance={5} color={toldoColors.tacos} />
     </group>
   );
 }
@@ -130,13 +135,17 @@ function PuestoFrutas({ puesto, isNear }: { puesto: PuestoType; isNear: boolean 
         {puesto.nombre}
       </Text>
 
+      <pointLight position={[0, 3, 0]} intensity={2} distance={5} color={toldoColors.frutas} />
+
+      {/* Mascota del puesto */}
+      <Mascota tipo="pug" position={[2, 0, 1]} rotation={[0, -Math.PI / 3, 0]} scale={1} />
+
+      {/* Indicador sobre la mascota */}
       {isNear && !puesto.completado && (
-        <Text position={[0, 2.2, 0]} fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
+        <Text position={[2, 2, 1]} fontSize={0.25} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
           [E] Hablar
         </Text>
       )}
-
-      <pointLight position={[0, 3, 0]} intensity={2} distance={5} color={toldoColors.frutas} />
     </group>
   );
 }
@@ -192,13 +201,17 @@ function PuestoDulces({ puesto, isNear }: { puesto: PuestoType; isNear: boolean 
         {puesto.nombre}
       </Text>
 
+      <pointLight position={[0, 2.5, 0.5]} intensity={2} distance={5} color={toldoColors.dulces} />
+
+      {/* Mascota del puesto */}
+      <Mascota tipo="gato" position={[1.5, 0, 1]} rotation={[0, -Math.PI / 4, 0]} scale={0.6} />
+
+      {/* Indicador sobre la mascota */}
       {isNear && !puesto.completado && (
-        <Text position={[0, 2.8, 0.8]} fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
+        <Text position={[1.5, 1.5, 1]} fontSize={0.25} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
           [E] Hablar
         </Text>
       )}
-
-      <pointLight position={[0, 2.5, 0.5]} intensity={2} distance={5} color={toldoColors.dulces} />
     </group>
   );
 }
@@ -262,13 +275,17 @@ function PuestoElotes({ puesto, isNear }: { puesto: PuestoType; isNear: boolean 
         {puesto.nombre}
       </Text>
 
+      <pointLight position={[0, 2.8, 0]} intensity={2} distance={5} color={toldoColors.elotes} />
+
+      {/* Mascota del puesto */}
+      <Mascota tipo="pomeranian" position={[-1.8, 0, 1]} rotation={[0, Math.PI - Math.PI / 4, 0]} scale={0.8} />
+
+      {/* Indicador sobre la mascota */}
       {isNear && !puesto.completado && (
-        <Text position={[0, 2.5, 0]} fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
+        <Text position={[-1.8, 1.8, 1]} fontSize={0.25} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
           [E] Hablar
         </Text>
       )}
-
-      <pointLight position={[0, 2.8, 0]} intensity={2} distance={5} color={toldoColors.elotes} />
     </group>
   );
 }
@@ -345,13 +362,17 @@ function PuestoPan({ puesto, isNear }: { puesto: PuestoType; isNear: boolean }) 
         {puesto.nombre}
       </Text>
 
+      <pointLight position={[0, 3, 0]} intensity={2} distance={6} color={toldoColors.pan} />
+
+      {/* Mascota del puesto */}
+      <Mascota tipo="pug" position={[-1.8, 0, 1]} rotation={[0, Math.PI / 3, 0]} scale={1} />
+
+      {/* Indicador sobre la mascota */}
       {isNear && !puesto.completado && (
-        <Text position={[0, 2.8, 0.8]} fontSize={0.2} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
+        <Text position={[-1.8, 2, 1]} fontSize={0.25} color="#FFD700" anchorX="center" anchorY="middle" outlineWidth={0.03} outlineColor="#000000">
           [E] Hablar
         </Text>
       )}
-
-      <pointLight position={[0, 3, 0]} intensity={2} distance={6} color={toldoColors.pan} />
     </group>
   );
 }

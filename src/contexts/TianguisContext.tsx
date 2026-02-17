@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 // Tipos de puestos
 export type PuestoType = "tacos" | "frutas" | "dulces" | "elotes" | "jugos" | "pan" | "quesadillas";
@@ -20,8 +21,18 @@ export interface Puesto {
 // Collider para detección de colisiones
 export interface Collider {
   position: [number, number, number];
-  size: [number, number, number]; // [width, height, depth]
-  type: string; // tipo de objeto para debugging
+  size: [number, number, number];
+  type: string;
+}
+
+// Inventario de frutas por tipo
+export interface InventarioFrutas {
+  tacos: number;
+  frutas: number;
+  dulces: number;
+  elotes: number;
+  pan: number;
+  total: number;
 }
 
 interface TianguisContextType {
@@ -34,14 +45,83 @@ interface TianguisContextType {
   agregarComida: (comida: string) => void;
   completarPuesto: (id: number) => void;
   colliders: Collider[];
+  // Nuevo sistema de frutas
+  inventarioFrutas: InventarioFrutas;
+  agregarFrutas: (cantidad: number, tipo: string) => void;
+  // Control del diálogo
+  dialogoAbierto: boolean;
+  abrirDialogo: () => void;
+  cerrarDialogo: () => void;
 }
 
 const TianguisContext = createContext<TianguisContextType | undefined>(undefined);
 
-export function TianguisProvider({ children }: { children: ReactNode }) {
+interface TianguisProviderProps {
+  children: ReactNode;
+  userId?: string;
+}
+
+export function TianguisProvider({ children, userId }: TianguisProviderProps) {
   const [catPosition, setCatPosition] = useState<[number, number, number]>([0, 0, 0]);
   const [puestoActual, setPuestoActual] = useState<Puesto | null>(null);
   const [comidasObtenidas, setComidasObtenidas] = useState<string[]>([]);
+  const [dialogoAbierto, setDialogoAbierto] = useState(false);
+  const [progressLoaded, setProgressLoaded] = useState(false);
+  const [inventarioFrutas, setInventarioFrutas] = useState<InventarioFrutas>({
+    tacos: 0,
+    frutas: 0,
+    dulces: 0,
+    elotes: 0,
+    pan: 0,
+    total: 0,
+  });
+
+  // Cargar progreso guardado del usuario
+  useEffect(() => {
+    if (!userId) return;
+
+    const loadProgress = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("inventario, puestos_completados")
+        .eq("id", userId)
+        .single();
+
+      if (data?.inventario) {
+        setInventarioFrutas(data.inventario);
+      }
+      if (data?.puestos_completados) {
+        setPuestos(prev => prev.map(p => ({
+          ...p,
+          completado: data.puestos_completados.includes(p.id)
+        })));
+      }
+      setProgressLoaded(true);
+    };
+
+    loadProgress();
+  }, [userId]);
+
+  // Guardar progreso cuando cambia el inventario
+  useEffect(() => {
+    if (!userId || !progressLoaded) return;
+
+    const saveProgress = async () => {
+      const puestosCompletadosIds = puestos.filter(p => p.completado).map(p => p.id);
+
+      await supabase
+        .from("profiles")
+        .update({
+          inventario: inventarioFrutas,
+          puestos_completados: puestosCompletadosIds,
+          total_frutas: inventarioFrutas.total,
+        })
+        .eq("id", userId);
+    };
+
+    saveProgress();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, inventarioFrutas, progressLoaded]);
 
   // Definir los puestos del tianguis (5 puestos)
   const [puestos, setPuestos] = useState<Puesto[]>([
@@ -101,15 +181,51 @@ export function TianguisProvider({ children }: { children: ReactNode }) {
     setComidasObtenidas((prev) => [...prev, comida]);
   };
 
-  const completarPuesto = (id: number) => {
-    setPuestos((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, completado: true } : p))
-    );
-  };
+  const completarPuesto = useCallback((id: number) => {
+    setPuestos((prev) => {
+      const updated = prev.map((p) => (p.id === id ? { ...p, completado: true } : p));
+
+      // Guardar puestos completados en Supabase
+      if (userId && progressLoaded) {
+        const completadosIds = updated.filter(p => p.completado).map(p => p.id);
+        supabase
+          .from("profiles")
+          .update({ puestos_completados: completadosIds })
+          .eq("id", userId);
+      }
+
+      return updated;
+    });
+  }, [userId, progressLoaded]);
+
+  const agregarFrutas = useCallback((cantidad: number, tipo: string) => {
+    setInventarioFrutas((prev) => {
+      const tipoKey = tipo as keyof Omit<InventarioFrutas, 'total'>;
+      if (tipoKey in prev && tipoKey !== 'total') {
+        return {
+          ...prev,
+          [tipoKey]: prev[tipoKey] + cantidad,
+          total: prev.total + cantidad,
+        };
+      }
+      return {
+        ...prev,
+        total: prev.total + cantidad,
+      };
+    });
+  }, []);
+
+  const abrirDialogo = useCallback(() => {
+    setDialogoAbierto(true);
+  }, []);
+
+  const cerrarDialogo = useCallback(() => {
+    setDialogoAbierto(false);
+  }, []);
 
   // Colliders para todos los objetos sólidos del tianguis
   const colliders: Collider[] = [
-    // Puestos principales (usando dimensiones aproximadas de cada tipo)
+    // Puestos principales
     { position: [-5, 0, 0], size: [3.5, 3, 2], type: "puesto-tacos" },
     { position: [5, 0, 0], size: [3.5, 3.5, 2], type: "puesto-frutas" },
     { position: [-5, 0, -5], size: [2.5, 3.5, 1.8], type: "puesto-dulces" },
@@ -144,7 +260,7 @@ export function TianguisProvider({ children }: { children: ReactNode }) {
     { position: [-7, 0, 10], size: [0.8, 1, 0.8], type: "basura" },
     { position: [7, 0, 10], size: [0.8, 1, 0.8], type: "basura" },
 
-    // Edificios al fondo (paredes)
+    // Edificios al fondo
     { position: [-8, 0, -15], size: [4, 5, 1], type: "edificio" },
     { position: [8, 0, -15], size: [5, 6, 1], type: "edificio" },
     { position: [0, 0, -15], size: [3, 4, 1], type: "edificio" },
@@ -162,6 +278,11 @@ export function TianguisProvider({ children }: { children: ReactNode }) {
         agregarComida,
         completarPuesto,
         colliders,
+        inventarioFrutas,
+        agregarFrutas,
+        dialogoAbierto,
+        abrirDialogo,
+        cerrarDialogo,
       }}
     >
       {children}

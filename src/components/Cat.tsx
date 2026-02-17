@@ -180,12 +180,13 @@ export function Cat() {
   const [isMoving, setIsMoving] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [turnDirection, setTurnDirection] = useState(0);
-  const { setCatPosition, colliders } = useTianguis();
+  const { setCatPosition, colliders, puestoActual, abrirDialogo, dialogoAbierto } = useTianguis();
 
   // Variables para el salto
   const velocityY = useRef(0);
   const isGrounded = useRef(true);
   const jumpPressed = useRef(false);
+  const interactPressed = useRef(false);
 
   // Mouse tracking para desktop
   const mousePosition = useRef({ x: 0, y: 0 });
@@ -272,82 +273,97 @@ export function Cat() {
     const right = keyboardControls.right;
     const run = keyboardControls.run;
     const jump = keyboardControls.jump;
+    const interact = keyboardControls.interact;
 
-    const moving = forward || backward || left || right;
-
-    if (moving !== isMoving) setIsMoving(moving);
-    if (run !== isRunning) setIsRunning(run);
-
-    // Lógica de salto
-    if (jump && isGrounded.current && !jumpPressed.current) {
-      velocityY.current = JUMP_FORCE;
-      isGrounded.current = false;
-      jumpPressed.current = true;
+    // Lógica de interacción con vendedores
+    if (interact && !interactPressed.current && !dialogoAbierto) {
+      interactPressed.current = true;
+      if (puestoActual && !puestoActual.completado) {
+        abrirDialogo();
+      }
     }
-    if (!jump) {
-      jumpPressed.current = false;
+    if (!interact) {
+      interactPressed.current = false;
     }
 
-    const currentSpeed = run ? RUN_SPEED : WALK_SPEED;
-    const newTurnDir = left ? 1 : right ? -1 : 0;
-    if (newTurnDir !== turnDirection) setTurnDirection(newTurnDir);
+    // Solo procesar movimiento si el diálogo NO está abierto
+    if (!dialogoAbierto) {
+      const moving = forward || backward || left || right;
 
-    if (left) groupRef.current.rotation.y += ROTATION_SPEED * delta;
-    if (right) groupRef.current.rotation.y -= ROTATION_SPEED * delta;
+      if (moving !== isMoving) setIsMoving(moving);
+      if (run !== isRunning) setIsRunning(run);
 
-    // Movimiento adelante/atrás
-    if (forward || backward) {
-      _direction.set(0, 0, forward ? -1 : 1);
-      _direction.applyQuaternion(groupRef.current.quaternion);
-      _direction.multiplyScalar(currentSpeed * delta);
+      // Lógica de salto
+      if (jump && isGrounded.current && !jumpPressed.current) {
+        velocityY.current = JUMP_FORCE;
+        isGrounded.current = false;
+        jumpPressed.current = true;
+      }
+      if (!jump) {
+        jumpPressed.current = false;
+      }
 
-      _newPosition.copy(groupRef.current.position).add(_direction);
+      const currentSpeed = run ? RUN_SPEED : WALK_SPEED;
+      const newTurnDir = left ? 1 : right ? -1 : 0;
+      if (newTurnDir !== turnDirection) setTurnDirection(newTurnDir);
 
-      // Límites del tianguis
-      const limit = 12;
-      _newPosition.x = THREE.MathUtils.clamp(_newPosition.x, -limit, limit);
-      _newPosition.z = THREE.MathUtils.clamp(_newPosition.z, -limit, limit);
+      if (left) groupRef.current.rotation.y += ROTATION_SPEED * delta;
+      if (right) groupRef.current.rotation.y -= ROTATION_SPEED * delta;
 
-      // Tamaño del collider del gato (aproximado)
-      const catSize: [number, number, number] = [0.6, 0.5, 0.8];
+      // Movimiento adelante/atrás
+      if (forward || backward) {
+        _direction.set(0, 0, forward ? -1 : 1);
+        _direction.applyQuaternion(groupRef.current.quaternion);
+        _direction.multiplyScalar(currentSpeed * delta);
 
-      // Verificar colisión con todos los objetos
-      let hasCollision = false;
-      for (const collider of colliders) {
-        if (checkCollision(
-          [_newPosition.x, _newPosition.y, _newPosition.z],
-          catSize,
-          collider.position,
-          collider.size
-        )) {
-          hasCollision = true;
-          break;
+        _newPosition.copy(groupRef.current.position).add(_direction);
+
+        // Límites del tianguis
+        const limit = 12;
+        _newPosition.x = THREE.MathUtils.clamp(_newPosition.x, -limit, limit);
+        _newPosition.z = THREE.MathUtils.clamp(_newPosition.z, -limit, limit);
+
+        // Tamaño del collider del gato (aproximado)
+        const catSize: [number, number, number] = [0.6, 0.5, 0.8];
+
+        // Verificar colisión con todos los objetos
+        let hasCollision = false;
+        for (const collider of colliders) {
+          if (checkCollision(
+            [_newPosition.x, _newPosition.y, _newPosition.z],
+            catSize,
+            collider.position,
+            collider.size
+          )) {
+            hasCollision = true;
+            break;
+          }
+        }
+
+        // Solo mover si no hay colisión
+        if (!hasCollision) {
+          groupRef.current.position.x = _newPosition.x;
+          groupRef.current.position.z = _newPosition.z;
         }
       }
 
-      // Solo mover si no hay colisión
-      if (!hasCollision) {
-        groupRef.current.position.x = _newPosition.x;
-        groupRef.current.position.z = _newPosition.z;
-      }
-    }
+      // Aplicar gravedad y actualizar posición Y
+      if (!isGrounded.current) {
+        velocityY.current -= GRAVITY * delta;
+        groupRef.current.position.y += velocityY.current * delta;
 
-    // Aplicar gravedad y actualizar posición Y
-    if (!isGrounded.current) {
-      velocityY.current -= GRAVITY * delta;
-      groupRef.current.position.y += velocityY.current * delta;
-
-      if (groupRef.current.position.y <= 0) {
+        if (groupRef.current.position.y <= 0) {
+          groupRef.current.position.y = 0;
+          velocityY.current = 0;
+          isGrounded.current = true;
+        }
+      } else {
         groupRef.current.position.y = 0;
-        velocityY.current = 0;
-        isGrounded.current = true;
       }
-    } else {
-      groupRef.current.position.y = 0;
-    }
 
-    // Actualizar posición del gato en el contexto
-    setCatPosition([catPos.x, catPos.y, catPos.z]);
+      // Actualizar posición del gato en el contexto
+      setCatPosition([catPos.x, catPos.y, catPos.z]);
+    }
 
     // Calcular posición de cámara detrás del gato
     _behindOffset.set(0, 1.5, 3);

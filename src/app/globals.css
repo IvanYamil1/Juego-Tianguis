@@ -21,3 +21,13 @@ canvas {
   display: block;
   outline: none;
 }
+
+/* Animación de rebote para indicador de carga */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
